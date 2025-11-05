@@ -1,24 +1,30 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { NetworkProvider } from '@/context/NetworkProvider';
+import { FarmerFormProvider } from '@/forms/Blooming';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 export const unstable_settings = {
-  anchor: '(tabs)',
+  anchor: 'form',
 };
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1 }}>
+        <NetworkProvider>
+          <FarmerFormProvider>
+            <ThemeProvider value={DefaultTheme}>
+              <Stack screenOptions={{ headerShown: false }} />
+              <StatusBar style="auto" />
+            </ThemeProvider>
+          </FarmerFormProvider>
+        </NetworkProvider>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
