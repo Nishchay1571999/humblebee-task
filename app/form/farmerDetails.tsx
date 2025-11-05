@@ -1,4 +1,3 @@
-// screens/FarmerDetailsPage.tsx
 import { AppButton } from "@/components/Button";
 import { Dropdown } from "@/components/DropDown";
 import { Option, SelectRadio } from "@/components/SelectRadio";
@@ -33,9 +32,7 @@ const STATES = Object.keys(STATE_DISTRICT_DATA).map((s) => ({
     value: s,
 }));
 
-/**
- * Inner form page that consumes the context
- */
+
 const FarmerDetailsInner = () => {
     const { isInternetReachable } = useNetwork();
     const [addManually, setAddManually] = useState<boolean>(false);

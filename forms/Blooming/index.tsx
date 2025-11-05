@@ -1,4 +1,3 @@
-// context/FarmerFormContext.tsx
 import {
     closeRealm,
     getAllFarmerSubmissions,
@@ -50,7 +49,6 @@ export const FarmerFormProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const [saving, setSaving] = useState(false);
 
-    // Open realm when provider mounts, close when unmounts
     useEffect(() => {
         let mounted = true;
         (async () => {
@@ -72,14 +70,12 @@ export const FarmerFormProvider: React.FC<{ children: React.ReactNode }> = ({
     }, []);
 
     const submitForm = async () => {
-        const valid = await form.trigger(); // run validations
+        const valid = await form.trigger(); 
         if (!valid) {
-            // react-hook-form will attach errors to fields already
             return;
         }
 
         const data = form.getValues();
-        // Ensure no empty values (defensive)
         const requiredFields: (keyof FarmerFormValues)[] = [
             "farmerName",
             "contactNumber",
@@ -112,8 +108,6 @@ export const FarmerFormProvider: React.FC<{ children: React.ReactNode }> = ({
             });
             setSaving(false);
             Alert.alert("Saved", "Form saved locally.", [{ text: "OK" }]);
-            // optionally reset or keep values — currently keeping values
-            // form.reset();
             return id;
         } catch (err) {
             setSaving(false);

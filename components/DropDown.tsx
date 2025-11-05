@@ -1,4 +1,3 @@
-// components/Dropdown.tsx
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Control, Controller, RegisterOptions } from "react-hook-form";
@@ -52,7 +51,6 @@ export function Dropdown<T = string>({
                 rules={rules}
                 render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <>
-                        {/* Dropdown Button */}
                         <Pressable
                             testID={testID}
                             onPress={() => allowOpen && setOpen((prev) => !prev)}
@@ -83,8 +81,6 @@ export function Dropdown<T = string>({
                         {error ? (
                             <Text style={styles.errorText}>{error.message ?? "Required"}</Text>
                         ) : null}
-
-                        {/* Dropdown List Modal */}
                         <Modal
                             visible={open}
                             transparent

@@ -96,19 +96,15 @@ export default function ProgressHeaderStepper({
 }: Props) {
     const { currentStep, totalSteps, goTo } = useProgress();
 
-    // measured width of the track container
     const [trackWidth, setTrackWidth] = useState(0);
-    const positionsRef = useRef<number[]>([]); // pixel x positions for each step
+    const positionsRef = useRef<number[]>([]); 
 
-    // animated width of filled line in px
     const fillValue = useSharedValue(0);
 
-    // measure container to compute dot positions
     const onTrackLayout = useCallback((e: LayoutChangeEvent) => {
         const w = e.nativeEvent.layout.width;
         setTrackWidth(w);
 
-        // compute x positions for each step (center of each dot)
         const pos: number[] = [];
         if (totalSteps <= 1) {
             pos.push(w / 2);
@@ -119,12 +115,10 @@ export default function ProgressHeaderStepper({
             }
         }
         positionsRef.current = pos;
-        // set initial fill
         const initial = pos[Math.max(0, currentStep - 1)] ?? 0;
         fillValue.value = initial;
     }, [totalSteps, currentStep, fillValue]);
 
-    // animate fill on step change
     useEffect(() => {
         if (!positionsRef.current.length) return;
         const target = positionsRef.current[Math.max(0, currentStep - 1)] ?? 0;
@@ -135,7 +129,6 @@ export default function ProgressHeaderStepper({
         width: fillValue.value,
     }));
 
-    // render step dot
     const renderDot = (index: number) => {
         const isActive = index + 1 === currentStep;
         const leftPx = positionsRef.current[index] ?? 0;
@@ -185,11 +178,8 @@ export default function ProgressHeaderStepper({
             </View>
 
             <View style={styles.trackContainer}>
-                {/* Track / line container */}
                 <View style={styles.trackWrapper} onLayout={onTrackLayout}>
-                    {/* background line */}
                     <View style={[styles.trackBg, { height: trackHeight }]} />
-                    {/* animated fill -- absolutely positioned width */}
                     <Animated.View
                         style={[
                             styles.trackFill,
@@ -197,14 +187,12 @@ export default function ProgressHeaderStepper({
                             animatedFillStyle,
                         ]}
                     />
-                    {/* step dots (positioned absolutely over the track) */}
                     <View style={styles.dotsContainer}>
                         {Array.from({ length: totalSteps }).map((_, i) => renderDot(i))}
                     </View>
                 </View>
             </View>
 
-            {/* subtitle / section label centered under the track */}
             <View style={styles.footerRow}>
                 <Text style={styles.sectionLabel}>Farmer Profile</Text>
             </View>
@@ -228,12 +216,10 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         borderBottomLeftRadius: 14,
         borderBottomRightRadius: 14,
-        // subtle shadow for iOS
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
-        // elevation for Android
         elevation: 6,
     },
     headerRow: {
@@ -298,7 +284,6 @@ const styles = StyleSheet.create({
     dot: {
         justifyContent: "center",
         alignItems: "center",
-        // white border ring for inactive dots is handled inline
     },
     dotNumber: {
         position: "absolute",

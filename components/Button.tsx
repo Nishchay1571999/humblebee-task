@@ -24,10 +24,10 @@ export const AppButton: React.FC<AppButtonProps> = ({
 
     const backgroundColor =
         type === "primary"
-            ? "#D4391b" // green
+            ? "#D4391b" 
             : type === "secondary"
-                ? "#FDE6E3" // light green
-                : "#F2F2F2"; // greyed out
+                ? "#FDE6E3" 
+                : "#F2F2F2"; 
 
     const textColor =
         type === "primary"

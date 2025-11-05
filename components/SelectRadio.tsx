@@ -1,4 +1,3 @@
-// SelectRadio.tsx
 import React, { useEffect, useRef, useState } from "react";
 import { Control, Controller, RegisterOptions } from "react-hook-form";
 import {
@@ -22,11 +21,9 @@ export type Option<T = string> = {
 
 type BaseProps<T = string> = {
     options: Option<T>[];
-    // controlled/uncontrolled usage (when NOT using react-hook-form)
     value?: T;
     defaultValue?: T;
     onValueChange?: (value: T) => void;
-    // layout + styling
     horizontal?: boolean;
     containerStyle?: StyleProp<ViewStyle>;
     optionStyle?: StyleProp<ViewStyle>;
@@ -37,7 +34,6 @@ type BaseProps<T = string> = {
     testID?: string;
 };
 
-// Form props (optional). If provided, the component will use Controller internally.
 type FormProps = {
     name?: string;
     control?: Control<any>;
@@ -46,18 +42,8 @@ type FormProps = {
 
 type Props<T = string> = BaseProps<T> & FormProps;
 
-/**
- * SelectRadio - single component that can be used directly with:
- * 1) react-hook-form (pass control + name) -> internal Controller handles registration
- * 2) controlled / uncontrolled usage (pass value/onValueChange or defaultValue)
- *
- * When used with react-hook-form you do NOT need to supply the `error` prop manually;
- * it will be read from fieldState and shown automatically. If you provide both `error`
- * prop and `control`, the explicit `error` prop will take precedence.
- */
 export function SelectRadio<T = string>({
     options,
-    // controlled fallback
     value: controlledValue,
     defaultValue,
     onValueChange,
@@ -69,16 +55,13 @@ export function SelectRadio<T = string>({
     error: explicitError,
     disabled = false,
     testID,
-    // form props
     name,
     control,
     rules,
 }: Props<T>) {
-    // If we're in "form mode" (control + name provided), render a Controller wrapper.
     const isFormMode = Boolean(control && name);
 
     if (isFormMode) {
-        // render Controller and show internal field + error handling
         return (
             <Controller
                 control={control!}
@@ -87,7 +70,6 @@ export function SelectRadio<T = string>({
                 render={({ field: { value, onChange }, fieldState: { error } }) => (
                     <SelectRadioView<T>
                         options={options}
-                        // map null/undefined to undefined for internal handling
                         value={value === null ? undefined : (value as T | undefined)}
                         onValueChange={(v) => onChange(v)}
                         horizontal={horizontal}
@@ -104,7 +86,6 @@ export function SelectRadio<T = string>({
         );
     }
 
-    // not form mode -> render normal controlled/uncontrolled view
     return (
         <SelectRadioView<T>
             options={options}
@@ -123,9 +104,6 @@ export function SelectRadio<T = string>({
     );
 }
 
-/**
- * Internal presentational component (keeps Controller logic out of rendering details)
- */
 function SelectRadioView<T = string>({
     options,
     value: controlledValue,
@@ -149,13 +127,11 @@ function SelectRadioView<T = string>({
         if (isControlled) setValue(controlledValue);
     }, [controlledValue, isControlled]);
 
-    // Animated values per option key (stringified)
     const animRef = useRef<Record<string, Animated.Value>>(
         Object.fromEntries(options.map((o) => [String(o.value), new Animated.Value(0)]))
     ).current;
 
     useEffect(() => {
-        // Ensure animRef contains keys for new options (if options prop changes)
         options.forEach((opt) => {
             const key = String(opt.value);
             if (!animRef[key]) {

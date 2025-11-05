@@ -74,7 +74,6 @@ export async function saveFarmerSubmission(data: {
 export async function getAllFarmerSubmissions() {
     const realm = await openRealm();
     const objs = realm.objects("FarmerSubmission");
-    // convert to plain JS array
     return objs.map((o: any) => ({
         _id: o._id,
         farmerName: o.farmerName,
